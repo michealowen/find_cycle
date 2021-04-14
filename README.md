@@ -1,266 +1,107 @@
 ![alt sss](find_cycle.jpg)
 
-![alt sss](find_cycle.jpg)
-## 寻找有向图中指定长度的简单环
+# 寻找有向图中给定长度的环
 
-- 目前工作,实现所有的找环算法
+## 1.已办与待办事项
+### 已办
+- [x] 项目架构 C++、 cmake、cygwin
+- [x] Tiernan算法实现
 
-`
-├── CMakeLists.txt
-├── README.md
-├── cmake-build-debug
-│	├── CMakeCache.txt
-│	├── CMakeFiles
-│	│	├── 3.17.5
-│	│	│	├── CMakeCCompiler.cmake
-│	│	│	├── CMakeCXXCompiler.cmake
-│	│	│	├── CMakeDetermineCompilerABI_C.bin
-│	│	│	├── CMakeDetermineCompilerABI_CXX.bin
-│	│	│	├── CMakeRCCompiler.cmake
-│	│	│	├── CMakeSystem.cmake
-│	│	│	├── CompilerIdC
-│	│	│	│	├── CMakeCCompilerId.c
-│	│	│	│	├── a.exe
-│	│	│	│	└── tmp
-│	│	│	└── CompilerIdCXX
-│	│	│	    ├── CMakeCXXCompilerId.cpp
-│	│	│	    ├── a.exe
-│	│	│	    └── tmp
-│	│	├── ALGORITHM_OBJ.dir
-│	│	│	├── ALGORITHM_OBJ.objlib
-│	│	│	├── DependInfo.cmake
-│	│	│	├── build.make
-│	│	│	├── cmake_clean.cmake
-│	│	│	├── depend.make
-│	│	│	├── flags.make
-│	│	│	├── progress.make
-│	│	│	└── src
-│	│	│	    └── algorithm
-│	│	├── CMakeDirectoryInformation.cmake
-│	│	├── CMakeOutput.log
-│	│	├── CMakeTmp
-│	│	├── IO_OBJ.dir
-│	│	│	├── DependInfo.cmake
-│	│	│	├── IO_OBJ.objlib
-│	│	│	├── build.make
-│	│	│	├── cmake_clean.cmake
-│	│	│	├── depend.make
-│	│	│	├── flags.make
-│	│	│	├── progress.make
-│	│	│	└── src
-│	│	│	    └── io
-│	│	├── Makefile.cmake
-│	│	├── Makefile2
-│	│	├── NETWORK_OBJ.dir
-│	│	│	├── DependInfo.cmake
-│	│	│	├── NETWORK_OBJ.objlib
-│	│	│	├── build.make
-│	│	│	├── cmake_clean.cmake
-│	│	│	├── depend.make
-│	│	│	├── flags.make
-│	│	│	├── progress.make
-│	│	│	└── src
-│	│	│	    └── network
-│	│	├── TEST_OBJ.dir
-│	│	│	├── DependInfo.cmake
-│	│	│	├── TEST_OBJ.objlib
-│	│	│	├── build.make
-│	│	│	├── cmake_clean.cmake
-│	│	│	├── depend.make
-│	│	│	├── flags.make
-│	│	│	├── progress.make
-│	│	│	└── src
-│	│	│	    └── test
-│	│	├── TargetDirectories.txt
-│	│	├── UTIL_GOBJ.dir
-│	│	│	├── DependInfo.cmake
-│	│	│	├── UTIL_GOBJ.objlib
-│	│	│	├── build.make
-│	│	│	├── cmake_clean.cmake
-│	│	│	├── depend.make
-│	│	│	├── flags.make
-│	│	│	├── progress.make
-│	│	│	└── src
-│	│	│	    └── util
-│	│	├── clion-environment.txt
-│	│	├── clion-log.txt
-│	│	├── cmake.check_cache
-│	│	├── find_cycle.dir
-│	│	│	├── DependInfo.cmake
-│	│	│	├── build.make
-│	│	│	├── cmake_clean.cmake
-│	│	│	├── depend.make
-│	│	│	├── flags.make
-│	│	│	├── link.txt
-│	│	│	├── progress.make
-│	│	│	└── src
-│	│	│	    └── app
-│	│	├── generate.dir
-│	│	│	├── DependInfo.cmake
-│	│	│	├── build.make
-│	│	│	├── cmake_clean.cmake
-│	│	│	├── depend.make
-│	│	│	├── flags.make
-│	│	│	├── link.txt
-│	│	│	├── progress.make
-│	│	│	└── src
-│	│	│	    └── app
-│	│	├── progress.marks
-│	│	└── test.dir
-│	│	    ├── DependInfo.cmake
-│	│	    ├── build.make
-│	│	    ├── cmake_clean.cmake
-│	│	    ├── depend.make
-│	│	    ├── flags.make
-│	│	    ├── link.txt
-│	│	    ├── progress.make
-│	│	    └── src
-│	│	        └── app
-│	├── Makefile
-│	├── Testing
-│	│	└── Temporary
-│	│	    └── LastTest.log
-│	├── cmake_install.cmake
-│	└── find_cycle.cbp
-├── data
-│	├── n100_e120
-│	│	└── n100_e120.txt
-│	├── n100_e500
-│	│	└── n100_e500.txt
-│	├── n10_e50
-│	│	└── n10_e50.txt
-│	├── n10_e90
-│	│	└── n10_e90.txt
-│	├── n20_e200
-│	│	└── n20_e200.txt
-│	├── n20_e50
-│	│	└── n20_e50.txt
-│	├── n20_e70
-│	│	└── n20_e70.txt
-│	├── n20_e80
-│	│	└── n20_e80.txt
-│	├── n30_e50
-│	│	└── n30_e50.txt
-│	├── n3_e5
-│	│	└── n3_e5.txt
-│	├── n4_e5
-│	│	└── n4_e5.txt
-│	├── n50_e1000
-│	│	└── n50_e1000.txt
-│	├── n50_e200
-│	│	└── n50_e200.txt
-│	├── n50_e500
-│	│	└── n50_e500.txt
-│	├── n5_e20
-│	│	└── n5_e20.txt
-│	└── n6_e15
-│	    └── n6_e15.txt
-├── find_cycle.jpg
-├── src
-│	├── algorithm
-│	│	├── Johnson.cpp
-│	│	├── Johnson.h
-│	│	├── Tiernan.cpp
-│	│	└── Tiernan.h
-│	├── app
-│	│	├── generate.cpp
-│	│	├── main.cpp
-│	│	└── test.cpp
-│	├── io
-│	│	├── reader.cpp
-│	│	├── reader.h
-│	│	├── writer.cpp
-│	│	└── writer.h
-│	├── network
-│	│	├── graph.cpp
-│	│	├── graph.h
-│	│	└── mtype.h
-│	├── test
-│	│	├── boost_graph_test.cpp
-│	│	└── boost_graph_test.h
-│	└── util
-│	    ├── debug.h
-│	    ├── util.cpp
-│	    └── util.h
-└── third_party
-└── spdlog
-├── async.h
-├── async_logger-inl.h
-├── async_logger.h
-├── common-inl.h
-├── common.h
-├── details
-│	├── backtracer.h
-│	├── circular_q.h
-│	├── console_globals.h
-│	├── file_helper-inl.h
-│	├── file_helper.h
-│	├── fmt_helper.h
-│	├── log_msg-inl.h
-│	├── log_msg.h
-│	├── log_msg_buffer.h
-│	├── mpmc_blocking_q.h
-│	├── null_mutex.h
-│	├── os-inl.h
-│	├── os.h
-│	├── pattern_formatter-inl.h
-│	├── pattern_formatter.h
-│	├── periodic_worker-inl.h
-│	├── periodic_worker.h
-│	├── registry-inl.h
-│	├── registry.h
-│	├── synchronous_factory.h
-│	├── thread_pool-inl.h
-│	└── thread_pool.h
-├── fmt
-│	├── bin_to_hex.h
-│	├── bundled
-│	│	├── LICENSE.rst
-│	│	├── chrono.h
-│	│	├── color.h
-│	│	├── core.h
-│	│	├── format-inl.h
-│	│	├── format.h
-│	│	├── locale.h
-│	│	├── ostream.h
-│	│	├── posix.h
-│	│	├── printf.h
-│	│	├── ranges.h
-│	│	└── time.h
-│	├── fmt.h
-│	└── ostr.h
-├── formatter.h
-├── logger-inl.h
-├── logger.h
-├── sinks
-│	├── android_sink.h
-│	├── ansicolor_sink-inl.h
-│	├── ansicolor_sink.h
-│	├── base_sink-inl.h
-│	├── base_sink.h
-│	├── basic_file_sink-inl.h
-│	├── basic_file_sink.h
-│	├── daily_file_sink.h
-│	├── dist_sink.h
-│	├── dup_filter_sink.h
-│	├── msvc_sink.h
-│	├── null_sink.h
-│	├── ostream_sink.h
-│	├── rotating_file_sink-inl.h
-│	├── rotating_file_sink.h
-│	├── sink-inl.h
-│	├── sink.h
-│	├── stdout_color_sinks-inl.h
-│	├── stdout_color_sinks.h
-│	├── stdout_sinks-inl.h
-│	├── stdout_sinks.h
-│	├── syslog_sink.h
-│	├── systemd_sink.h
-│	├── wincolor_sink-inl.h
-│	└── wincolor_sink.h
-├── spdlog-inl.h
-├── spdlog.h
-├── tweakme.h
-└── version.h
-`
+> Tiernan J C. An efficient search algorithm to find the elementary circuits of a graph[J]. Communications of the ACM, 1970, 13(12): 722-726.
 
+- [x] Johnson算法实现及调优
+
+
+> Johnson D B. Finding all the elementary circuits of a directed graph[J]. SIAM Journal on Computing, 1975, 4(1): 77-84.
+
+### 待办
+- [ ] Weinblatt 算法实现(与Tiernan应该区别不大)
+
+
+> Weinblatt H. A new search algorithm for finding the simple cycles of a finite directed graph[J]. Journal of the ACM (JACM), 1972, 19(1): 43-56.
+
+- [ ] Tarjan 算法实现
+
+
+> Tarjan R. Enumeration of the elementary circuits of a directed graph[J]. SIAM Journal on Computing, 1973, 2(3): 211-216.
+- [ ] Szwarcfiter and Lauer  算法实现
+
+> Szwarcfiter J L, Lauer P E. A search strategy for the elementary cycles of a directed graph[J]. BIT Numerical Mathematics, 1976, 16(2): 192-204.
+
+- [ ] K.A. Hawick and H.A. James∗算法实现
+
+
+
+> Hawick K A, James H A. Enumerating Circuits and Loops in Graphs with Self-Arcs and Multiple-Arcs[C]//FCS. 2008: 14-20.
+- [ ] 王玉英、陈平、苏旸 算法实现
+> [1]王玉英,陈平,苏旸.生成有向图中全部简单回路的一种新算法[J].陕西师范大学学报(自然科学版),2008(04):12-15.
+
+- [ ] 各种算法寻找指定长度环的变种
+
+## 2. 项目语言及环境
+
+- 语言:C++ 11
+- 平台:Cygwin 或 linux(Ubuntu)
+- 项目依赖: boost
+## 3.项目目录结构
+
+- src:源代码目录
+- - app:可执行文件的代码
+- - algorithm:各个算法
+- - io:IO库
+- - network: 核心数据结构
+- - util: debug工具
+- - test: 测试
+- build:编译目录
+- CmakeLists.txt: cmake 文件
+- data: 图数据
+## 4.项目编译与执行
+### 编译
+
+
+```c
+cd build
+cmake ..
+make
+```
+
+### 执行
+编译共得到三个可执行文件
+- **find_cycle.exe:找环算法**
+- **generate.exe:生成图**
+- **test.exe:执行测试**
+
+执行命令
+
+
+- **找环**
+```c
+/* 执行找环算法 */
+cd build
+// 第一个参数为使用算法名,john代表Johnson算法
+// 第二个参数为使用数据,data目录下的n20_e70/n20_e70.txt
+./find_cycle.exe john ../data/n20_e70/n20_e70.txt
+```
+|算法简称| 算法 |
+|--|--|
+| john | Johnson算法 |
+| tiernan | TIernan算法 |
+| tarjan| Tarjan算法 |
+- **生成图**
+```c
+/* 执行生成图算法 */
+cd build
+// 在data下新建一个目录
+mkdir ../data/n10_e20
+// 第一个参数图的顶点数
+// 第二个参数图的边数量
+// 第三个参数为数据存放目录
+// 下面命令生成了 10个顶点 20个边的图
+./generate.exe 10 20 ../data/n10_e20/n10_e20.txt
+```
+- **测试**
+```c
+/* 执行测试 */
+cd build
+./test
+```
